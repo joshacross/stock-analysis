@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    container_name: stock_backend
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app
+
+  frontend:
+    build: ./frontend
+    container_name: stock_frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge

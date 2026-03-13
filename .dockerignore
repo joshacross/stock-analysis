@@ -1,0 +1,58 @@
+# Ignore Node and Python artifacts
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+dist
+build
+.env
+.env.*
+*.env.*
+.DS_Store
+.vscode
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+*.db
+*.db-journal
+*.log
+.cursor
+# Editor directories and files
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Backend virtual environments
+.venv
+venv
+backend/__pycache__/
+
+# Frontend build artifacts
+frontend/dist
+frontend/node_modules
+frontend/build
+frontend/.env
+
+
+
+# Backend data/output caches
+backend/.mypy_cache
+backend/.pytest_cache
+
+
+# Ignore coverage reports
+coverage.*
+.coverage
+htmlcov/
+.tox/
+
+# Ignore docker-compose volume mount artifacts
+*.pid
