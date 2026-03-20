@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from pydantic import BaseModel
+from typing import Optional, Dict, Any, Generator, Union, List
 
 import uvicorn
 import pandas as pd
@@ -29,7 +30,7 @@ app.add_middleware(
 
 
 @app.get("/api/health")
-def health():
+def health() -> Dict[str, str]:
     return {"status": "ok"}
 
 
@@ -49,7 +50,7 @@ def _price_lookup_message(ticker: str) -> str:
     return f'No recent market price was found for ticker "{ticker}". Verify the ticker symbol and try again.'
 
 
-def _get_last_close(stock: yf.Ticker):
+def _get_last_close(stock: yf.Ticker) -> Optional[float]:
     history = stock.history(period='1d', interval='1m')
     if history.empty or 'Close' not in history:
         return None
@@ -61,7 +62,7 @@ def _get_last_close(stock: yf.Ticker):
     return float(close_prices.iloc[-1])
 
 
-def _get_fallback_price(stock: yf.Ticker):
+def _get_fallback_price(stock: yf.Ticker) -> Optional[float]:
     fast_info = getattr(stock, 'fast_info', None)
     if fast_info is not None:
         last_price = fast_info.get('lastPrice')
@@ -78,7 +79,7 @@ def _get_fallback_price(stock: yf.Ticker):
     return None
 
 
-def _serialize_frame(frame: pd.DataFrame) -> dict:
+def _serialize_frame(frame: pd.DataFrame) -> Dict[str, Any]:
     serialized = frame.copy()
     if isinstance(serialized.index, pd.DatetimeIndex):
         serialized.index = serialized.index.astype(str)
@@ -87,7 +88,7 @@ def _serialize_frame(frame: pd.DataFrame) -> dict:
 
 
 @tool('get_stock_price', description='A function that returns the current stock price based on a ticker symbol.')
-def get_stock_price(ticker: str):
+def get_stock_price(ticker: str) -> Union[float, str]:
     print('get_stock_price tool is being used')
     normalized_ticker = _normalize_ticker(ticker)
     stock = yf.Ticker(normalized_ticker)
@@ -103,7 +104,7 @@ def get_stock_price(ticker: str):
 
 
 @tool('get_historical_stock_price', description='A function that returns the current stock price over time based on a ticker symbol and a start and end date.')
-def get_historical_stock_price(ticker: str, start_date: str, end_date: str):
+def get_historical_stock_price(ticker: str, start_date: str, end_date: str) -> Dict[str, Any]:
     print('get_historical_stock_price tool is being used')
     normalized_ticker = _normalize_ticker(ticker)
     stock = yf.Ticker(normalized_ticker)
@@ -121,14 +122,14 @@ def get_historical_stock_price(ticker: str, start_date: str, end_date: str):
 
 
 @tool('get_balance_sheet', description='A function that returns the balance sheet based on a ticker symbol.')
-def get_balance_sheet(ticker: str):
+def get_balance_sheet(ticker: str) -> pd.DataFrame:
     print('get_balance_sheet tool is being used')
     stock = yf.Ticker(ticker)
     return stock.balance_sheet
 
 
 @tool('get_stock_news', description='A function that returns news based on a ticker symbol.')
-def get_stock_news(ticker: str):
+def get_stock_news(ticker: str) -> List[Dict[str, Any]]:
     print('get_stock_news tool is being used')
     stock = yf.Ticker(ticker)
     return stock.news
@@ -155,10 +156,10 @@ class RequestObject(BaseModel):
 
 
 @app.post('/api/chat')
-async def chat(request: RequestObject):
+async def chat(request: RequestObject) -> StreamingResponse:
     config = {'configurable': {'thread_id': request.threadId}}
 
-    def generate():
+    def generate() -> Generator[str, None, None]:
         for token, _ in agent.stream(
             {'messages': [
                 SystemMessage('You are a stock analysis assistant. You have the ability to get real-time stock prices, historical stock prices (given a date range), news and balance sheet data for a given ticker symbol.'),
