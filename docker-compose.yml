@@ -8,6 +8,7 @@ services:
       - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - UV_LINK_MODE=copy
     networks:
       - app
 
