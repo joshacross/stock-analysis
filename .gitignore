@@ -1,8 +1,11 @@
 .DS_STORE
-.env
 node_modules
+dist/
 .venv
 __pycache__
 backend/__pycache__
 .cursor
 .aider*
+.env
+.env.*
+!.env.example
