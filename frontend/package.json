@@ -13,8 +13,7 @@
     "@crayonai/react-ui": "^0.9.16",
     "@thesysai/genui-sdk": "^0.10.3",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "zod": "^3.25.76"
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -29,6 +28,7 @@
     "tailwindcss": "^4.3.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.63.0",
-    "vite": "^8.1.4"
+    "vite": "^8.1.4",
+    "zod": "^3.25.76"
   }
 }
