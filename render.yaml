@@ -23,9 +23,9 @@ services:
     autoDeployTrigger: commit
     envVars:
       - key: FRONTEND_URL
-        value: https://stock-analysis.onrender.com
+        value: https://stock-analysis-xuq1.onrender.com
       - key: VITE_API_URL
-        value: https://stock-analysis-api.onrender.com/api/chat
+        value: https://stock-analysis-api-y6gg.onrender.com
     routes:
       - type: rewrite
         source: /*
