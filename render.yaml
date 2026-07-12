@@ -18,7 +18,7 @@ services:
     name: stock-analysis
     runtime: static
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
     staticPublishPath: ./dist
     autoDeployTrigger: commit
     envVars:
